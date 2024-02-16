@@ -136,7 +136,7 @@ fun MenuView(type: DishType) {
 
 @Composable
 fun postData(type: DishType, category: MutableState<Category?>) {
-    val currentCategory = type.title()
+    val currentCategory = type.key()
     val context = LocalContext.current
     val queue = Volley.newRequestQueue(context)
 
