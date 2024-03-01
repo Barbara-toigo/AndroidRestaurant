@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -37,21 +41,25 @@ import coil.request.ImageRequest
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import fr.isen.toigo.androiderestaurant.R
 import fr.isen.toigo.androiderestaurant.network.Category
 import fr.isen.toigo.androiderestaurant.network.Dish
 import fr.isen.toigo.androiderestaurant.network.MenuResult
 import fr.isen.toigo.androiderestaurant.network.NetworkConstants
 import com.google.gson.GsonBuilder
+import fr.isen.toigo.androiderestaurant.ui.theme.AndroidERestaurantTheme
 import org.json.JSONObject
 
 class MenuActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val type = (intent.getSerializableExtra(CATEGROY_EXTRA_KEY) as? DishType) ?: DishType.STARTERS
+        val type = (intent.getSerializableExtra(CATEGROY_EXTRA_KEY) as? DishType) ?: DishType.STARTER
 
         setContent {
-            MenuView(type)
+            AndroidERestaurantTheme {
+                MenuView(type)
+            }
         }
         Log.d("lifeCycle", "Menu Activity - OnCreate")
     }
@@ -97,7 +105,8 @@ fun MenuView(type: DishType) {
 
 @Composable fun dishRow(dish: Dish) {
     val context = LocalContext.current
-    Card(border =  BorderStroke(1.dp, Color.Black),
+    Card(border =  BorderStroke(1.dp, Color.White),
+        colors = CardDefaults.cardColors(Color(0xFFAB8371)),
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
@@ -136,7 +145,7 @@ fun MenuView(type: DishType) {
 
 @Composable
 fun postData(type: DishType, category: MutableState<Category?>) {
-    val currentCategory = type.key()
+    val currentCategory = type.filterKey()
     val context = LocalContext.current
     val queue = Volley.newRequestQueue(context)
 

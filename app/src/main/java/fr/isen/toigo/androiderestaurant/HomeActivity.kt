@@ -22,27 +22,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import fr.isen.toigo.androiderestaurant.R
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.TopAppBar
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import fr.isen.toigo.androiderestaurant.basket.BasketActivity
+
 import fr.isen.toigo.androiderestaurant.ui.theme.AndroidERestaurantTheme
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
+
 enum class DishType {
-    STARTERS, MAIN, DESSERTS;
+    STARTER, MAIN, DESSERT;
 
     @Composable
     fun title(): String {
         return when(this) {
-            STARTERS -> stringResource(id = R.string.starters)
-            MAIN -> stringResource(id = R.string.main)
-            DESSERTS -> stringResource(id = R.string.desserts)
+            STARTER -> stringResource(id = R.string.menu_starter)
+            MAIN -> stringResource(id = R.string.menu_main)
+            DESSERT -> stringResource(id = R.string.menu_dessert)
         }
     }
 
-    @Composable
-    fun key(): String {
+    fun filterKey(): String {
         return when(this) {
-            STARTERS -> "Entrées"
+            STARTER -> "Entrées"
             MAIN -> "Plats"
-            DESSERTS -> "Desserts"
+            DESSERT -> "Desserts"
         }
     }
 }
@@ -94,22 +107,56 @@ class HomeActivity : ComponentActivity(), MenuInterface {
 @Composable
 fun SetupView(menu: MenuInterface) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Image(painterResource(R.drawable.ic_launcher_foreground), null)
-        CustomButton(type = DishType.STARTERS, menu)
-        Divider()
-        CustomButton(type = DishType.MAIN, menu)
-        Divider()
-        CustomButton(type = DishType.DESSERTS, menu)
+        Image(
+            painter = painterResource(R.drawable.logo),
+            contentDescription = null,
+            modifier = Modifier.size(width = 250.dp, height = 250.dp)
+        )
+        Text(
+            text = "Bienvenue!",
+            modifier = Modifier.padding(vertical = 8.dp), style = TextStyle(
+                fontSize = 23.sp,
+                fontWeight = FontWeight.Bold
+            )
+        )
+        Text(
+            text = "Choisissez votre commande:",
+            modifier = Modifier.padding(vertical = 8.dp), style = TextStyle(
+                fontSize = 20.sp,
+            )
+        )
+        Button(
+            onClick = { menu.dishPressed(DishType.STARTER) },
+            colors = ButtonDefaults.buttonColors(Color(0xFF553425)),
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth()
+        ) {
+            Text(DishType.STARTER.title())
+        }
+        Button(
+            onClick = { menu.dishPressed(DishType.MAIN) },
+            colors = ButtonDefaults.buttonColors(Color(0xFF553425)),
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth()
+        ) {
+            Text(DishType.MAIN.title())
+        }
+        Button(
+            onClick = { menu.dishPressed(DishType.DESSERT) },
+            colors = ButtonDefaults.buttonColors(Color(0xFF553425)),
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth()
+        ) {
+            Text(DishType.DESSERT.title())
+        }
+
     }
 }
 
-@Composable fun CustomButton(type: DishType, menu: MenuInterface) {
-    TextButton(onClick = { menu.dishPressed(type) }) {
-        Text(type.title())
-    }
-}
-
-@Preview(showBackground = false)
+@Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     AndroidERestaurantTheme {
